@@ -22,7 +22,6 @@ const useGestures = (skMatrix: any, dimensions: any) => {
   }, matrix);
 
   const pan = Gesture.Pan().onChange(e => {
-    console.log(e);
     matrix.value = multiply4(Matrix4.translate(e.changeX, e.changeY, 0), matrix.value);
   });
 

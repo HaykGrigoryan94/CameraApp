@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 
-import CanvasTest from './src/components/CanvasTest'
+import CanvasComponent from './src/components/CanvasComponent'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import CameraComponent from './src/components/camera/index'
 
@@ -28,7 +28,7 @@ function App(): JSX.Element {
     <SafeAreaView style={styles.container}>
       {!url ? <CameraComponent setUrl={(url: any) => setUrl(url)} /> :
         <GestureHandlerRootView>
-          <CanvasTest url={url} setUrl={(url: any) => setUrl(url)} />
+          <CanvasComponent url={url} setUrl={(url: any) => setUrl(url)} />
         </GestureHandlerRootView>
       }
     </SafeAreaView >

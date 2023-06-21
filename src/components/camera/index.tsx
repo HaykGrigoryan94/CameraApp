@@ -1,15 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Button, Image } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
-import { Camera } from 'expo-camera';
+import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
+
+import { TopLayout, BottomLayout } from './CameraLayout';
 
 export default function CameraComponent({ setUrl }: any) {
   const cameraRef = useRef<any>();
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean>(false);
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any>();
-  const [flashMod, setFlashMod] = useState(2);
+  const [cameraDirection, setCameraDirection] = useState(CameraType.back)
+  const [flashMode, setFlashMode] = useState(2)
 
   useEffect(() => {
     (async () => {
@@ -41,25 +44,42 @@ export default function CameraComponent({ setUrl }: any) {
     }
   };
 
+
+  const toggleCameraType = () => {
+    setCameraDirection(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+  }
+  const toggleFlash = () => {
+    setFlashMode(flashMode === 3 ? 2 : 3)
+  }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setUrl(result)
+    }
+  };
+
   return (
-    <Camera style={styles.container} ref={cameraRef} flashMode={flashMod}>
-      <View style={styles.buttonContainer}>
-        <Button title="Flash" onPress={() => setFlashMod(flashMod === 3 ? 2 : 3)} />
-        <Button title="Take Pic" onPress={takePic} />
-        <Button title="flip" onPress={takePic} />
-      </View>
-      <StatusBar style="auto" />
+    <Camera style={styles.container} ref={cameraRef} flashMode={flashMode} type={cameraDirection}>
+      <TopLayout flash={() => toggleFlash()} />
+      <BottomLayout takePic={takePic} flip={toggleCameraType} goToGallery={() => pickImage()} />
     </Camera>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    // justifyContent: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between'
   },
   buttonContainer: {
     flexDirection: 'row',

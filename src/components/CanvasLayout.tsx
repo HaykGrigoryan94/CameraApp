@@ -1,20 +1,20 @@
-import {Dimensions, Text, TouchableOpacity, View, StyleSheet, Image, Animated} from 'react-native';
-import {FlatList, TextInput} from 'react-native-gesture-handler';
-import {icons, stickers} from '../constants';
+import { Dimensions, Text, TouchableOpacity, View, StyleSheet, Image, Animated } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { icons, stickers } from '../constants';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-export function TopLayout() {
+export const TopLayout = ({ onRemove }: any) => {
   return (
     <View style={[styles.top, styles.position]}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onRemove}>
         <Image source={icons.close} style={styles.icon} />
       </TouchableOpacity>
     </View>
   );
 }
 
-export function CenterLayout({openSlider}: any) {
+export const CenterLayout = ({ openSlider }: any) => {
   return (
     <View style={[styles.center, styles.position]}>
       <TouchableOpacity>
@@ -27,20 +27,17 @@ export function CenterLayout({openSlider}: any) {
   );
 }
 
-export function BottomLayout({onPress, onRemove}: any) {
+export const BottomLayout = ({ onPress }: any) => {
   return (
     <View style={[styles.bottom, styles.position]}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text>Save in the gallery</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onRemove}>
-        <Text>Remove</Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
-export function CanvasLayout() {
+export const CanvasLayout = () => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -68,11 +65,8 @@ export function CanvasLayout() {
   );
 }
 
-export function SlideUpContainer({onPress, goBack}: any) {
-  const animated = new Animated.Value(0);
-  const duration = 1000;
+export const SlideUpContainer = ({ onPress, goBack }: any) => {
   const stickerList = (el: any) => {
-    console.log(width);
     return (
       <TouchableOpacity style={styles.stickerContainer} onPress={() => onPress(el.sticker)}>
         <Image source={el.sticker} style={styles.sticker} />
@@ -81,27 +75,18 @@ export function SlideUpContainer({onPress, goBack}: any) {
   };
 
   return (
-    <Animated.View style={[{transform: [{translateY: animated}]}, styles.slider]}>
-      <View style={styles.searchBar}>
-        <TouchableOpacity onPress={goBack}>
-          <Image source={icons.goBack} style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search GIPHY..."
-            placeholderTextColor="white"
-          />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.slider}>
+      <TouchableOpacity onPress={goBack}>
+        <Image source={icons.goBack} style={styles.goBackIcon} />
+      </TouchableOpacity>
       <FlatList
         data={stickers}
-        renderItem={({item}) => stickerList(item)}
+        renderItem={({ item }) => stickerList(item)}
         keyExtractor={item => item.id.toString()}
         numColumns={3}
         columnWrapperStyle={styles.flatListWrapper}
       />
-    </Animated.View>
+    </View>
   );
 }
 
@@ -137,8 +122,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     tintColor: 'white',
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
   button: {
     width: '80%',
@@ -184,4 +169,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'white',
   },
+  goBackIcon: {
+    width: 14,
+    height: 14,
+    marginTop: 10,
+    marginLeft: 10
+  }
 });

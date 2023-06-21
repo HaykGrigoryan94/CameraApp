@@ -9,6 +9,9 @@ export const icons = {
   text: require('./assets/icons/edit-text.png'),
   sticker: require('./assets/icons/sticker.png'),
   goBack: require('./assets/icons/arrow.png'),
+  flip: require('./assets/icons/Cameraflip.png'),
+  shutter: require('./assets/icons/Shutter.png'),
+  gallery: require('./assets/icons/Gallery.png')
 };
 
 export const stickers = [
